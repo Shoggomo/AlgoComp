@@ -1,32 +1,18 @@
-from Tkinter import *
+from gui import GUI
+from config import FieldType
+import matrix_utils as mu
 
+def step():
+    pass
 
+def play():
+    pass
 
-def draw_chessboard(canvas, width, height, cell_width, cell_height):
-    matrix = []
-    for x in range(0, width, cell_width):
-        matrix.append([])
-        for y in range(0, height, cell_height):
-            id = canvas.create_rectangle(x, y, x+cwidth, y+cheight, fill="white")
-            matrix[len(matrix)-1].append(id)
-    return matrix
+if __name__:
+    matrix = mu.random_matrix(5)
+    print mu.search_field(matrix, FieldType.start)
+    c_matrix = mu.color_matrix(matrix)
 
-
-cwidth = 50
-cheight = 50
-
-width = 500
-height = 500
-
-root = Tk()
-frame = Frame(root)
-frame.pack()
-canvas = Canvas(frame, width=width, height=height)
-canvas.pack()
-
-ids = draw_chessboard(canvas, width, height, cwidth, cheight)
-print ids
-
-#canvas.itemconfigure(1, fill="red")
-
-root.mainloop()
+    gui = GUI()
+    gui.recolor_visualboard(c_matrix)
+    gui.mainloop()
