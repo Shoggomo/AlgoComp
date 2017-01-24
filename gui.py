@@ -6,12 +6,14 @@ class Visual(object):
 
     def __init__(self, parent):
         self._board = Visualboard(parent)
+        self._text = Label(parent, text="Test Text")
 
     def recolor(self, color_matrix):
         self._board.recolor(color_matrix)
 
     def pack(self):
         self._board.pack()
+        self._text.pack()
 
 
 class Visualboard(object):
