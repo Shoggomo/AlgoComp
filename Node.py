@@ -4,7 +4,6 @@ import config
 
 
 #TODO Knoten korrekt löschen
-#( Methode fuer finalen Pfad. Rueckwaerts von Zielknoten aus ueber Vorgaenger. )
 
 class Node:
 
@@ -34,6 +33,12 @@ class Graph:
     def __getitem__(self, pos):
         x, y = pos
         return self.nodes[x][y]
+
+    #Marks the path backwards. Pass the ends PREDECESSOR!!
+    def mark_path(self, node):
+        if node.field_type != FieldType.start:
+            node.field_type = FieldType.path
+            self.mark_path(node.predecessor)
 
 
 def __empty_nodes__(length, width):
