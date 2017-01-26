@@ -3,12 +3,6 @@ import config
 import random
 
 
-def empty_matrix():
-    l = config.CELL_COUNT[0]
-    w = config.CELL_COUNT[1]
-    return [x[:] for x in [[FieldType.unvisited] * l] * w]
-
-
 def get_color_by_fieldtype(fieldtype):
     colors = {
         FieldType.unvisited : "white",
@@ -20,6 +14,12 @@ def get_color_by_fieldtype(fieldtype):
         FieldType.path: "pink",
     }
     return colors[fieldtype]
+
+
+def empty_matrix():
+    l = config.CELL_COUNT[0]
+    w = config.CELL_COUNT[1]
+    return [x[:] for x in [[FieldType.unvisited] * l] * w]
 
 
 def color_matrix(fieldtype_matrix):

@@ -11,10 +11,12 @@ def play():
 
 
 g = Graph()
-g[(1, 3)].distance = 300
 g.set_start_node(1, 1)
-print [i.distance for i in g[(1, 2)].neighbours]
-print g[(1, 4)]
+for n in g.nodes:
+    print "(%2i, %2i, %i)" % (n.x, n.y, n.distance)
+
+n = g.min_distance_unvisited(lambda x: x)
+print "%i, %i, %i" % (n.x, n.y, n.distance)
 
 if __name__:
     pass
