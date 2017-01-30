@@ -15,7 +15,7 @@ class Dijkstra:
         current_node = self.graph.min_distance_unvisited()
 
         if current_node.field_type == FieldType.end:
-            self.mark_path(current_node.predecessor)
+            self.graph.mark_path(current_node.predecessor)
             return self.graph, True
 
         self.last_field_type = current_node.field_type
