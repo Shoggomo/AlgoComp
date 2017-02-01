@@ -1,52 +1,29 @@
 from config import FieldType
-import config
-import random
 
 
-def get_color_by_fieldtype(fieldtype):
+def get_color_for_node(node):
     colors = {
-        FieldType.unvisited : "white",
-        FieldType.visited : "grey",
+        FieldType.normal: "white",
         FieldType.start: "blue",
         FieldType.end: "red",
         FieldType.current: "orange",
         FieldType.obstacle: "black",
         FieldType.path: "pink",
     }
-    return colors[fieldtype]
+    if node:
+        if node.visited and node.field_type is FieldType.normal:
+            return "green"
+        return colors[node.field_type]
+    return colors[FieldType.obstacle]
 
 
-def empty_matrix():
-    l = config.CELL_COUNT[0]
-    w = config.CELL_COUNT[1]
-    return [x[:] for x in [[FieldType.unvisited] * l] * w]
-
-
-def color_matrix(fieldtype_matrix):
+def graph_to_colormatrix(graph):
     color_matrix = []
-    for l in fieldtype_matrix:
-        color_matrix.append(map(lambda x: get_color_by_fieldtype(x), l))
+    l = graph.length
+    w = graph.width
+    for x in range(l):
+        color_matrix.append([])
+        for y in range(w):
+            node = graph[(x, y)]
+            color_matrix[x].append(get_color_for_node(node))
     return color_matrix
-
-
-def random_assign_field(matrix, fieldtype):
-    i = random.randint(0, len(matrix)-1)
-    j = random.randint(0, len(matrix[i])-1)
-    matrix[i][j] = fieldtype
-
-
-def random_matrix(obstacle_count):
-    matrix = empty_matrix()
-    for _ in range(obstacle_count):
-        random_assign_field(matrix, FieldType.obstacle)
-    random_assign_field(matrix, FieldType.start)
-    random_assign_field(matrix, FieldType.end)
-    return matrix
-
-
-def search_field(matrix, fieldtype):
-    for i, e in enumerate(matrix):
-        for j, g in enumerate(e):
-            if g is fieldtype:
-                return i, j
-    return -1, -1

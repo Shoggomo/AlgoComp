@@ -1,6 +1,7 @@
 from gui import GUI
 from config import FieldType
 import matrix_utils as mu
+from Dijkstra import Dijkstra
 from Node import *
 
 def step():
@@ -12,18 +13,19 @@ def play():
 
 g = Graph()
 g.set_start_node(1, 1)
-for n in g.nodes:
-    print "(%2i, %2i, %i)" % (n.x, n.y, n.distance)
+g.set_end_node(6, 6)
+g.delete_node((3, 1))
+g.delete_node((1, 3))
+g.delete_node((2, 2))
+c_matrix = mu.graph_to_colormatrix(g)
 
-n = g.min_distance_unvisited(lambda x: x)
-print "%i, %i, %i" % (n.x, n.y, n.distance)
+gui = GUI()
+gui.recolor_visualboard(c_matrix)
 
-if __name__:
-    pass
-    #matrix = mu.random_matrix(5)
-    #print mu.search_field(matrix, FieldType.start)
-    #c_matrix = mu.color_matrix(matrix)
+d = Dijkstra(g)
+for _ in range(110):
+    d.do_step()
+c_matrix = mu.graph_to_colormatrix(d.do_step()[0])
+gui.recolor_visualboard(c_matrix)
 
-    #gui = GUI()
-    #gui.recolor_visualboard(c_matrix)
-    #gui.mainloop()
+gui.mainloop()
