@@ -1,6 +1,7 @@
 from config import FieldType
 from copy import deepcopy
 import itertools as it
+import random
 
 
 class Graph:
@@ -106,3 +107,14 @@ def graph_to_colormatrix(graph):
             node = graph[(x, y)]
             color_matrix[x].append(get_color_for_node(node))
     return color_matrix
+
+
+def create_random_graph(cell_count_l, cell_count_w, obstacle_count):
+    g = Graph(cell_count_l, cell_count_w)
+    all_coords = list(it.product(range(cell_count_l), range(cell_count_w)))
+    random_coords = random.sample(all_coords, obstacle_count + 2)
+    g.set_start_node(random_coords[0][0], random_coords[0][1])
+    g.set_end_node(random_coords[1][0], random_coords[1][1])
+    #obstacles = ((3, 1), (1, 3), (2, 2), (3, 0), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (2, 8), (3, 8), (4, 8), (5, 8), (6, 8), (7, 8))
+    map(lambda o: g.delete_node(o), random_coords[2:])
+    return g

@@ -4,39 +4,60 @@ import config
 
 class GUI(object):
 
-    def __init__(self):
+    def __init__(self, algorithms):
         self._root = Tk()
-        self._frame = Frame(self._root)
-        self._dijkstra_visual = Visualization(self._frame, "Dijkstra")
-        self._step_button = Button(self._frame, text='Step')
-        self._play_button = Button(self._frame, command=self.play, text='Play')
-        self._dijkstra_visual.pack()
-        self._step_button.pack()
-        self._play_button.pack()
-        self._frame.pack()
+        self._top = Frame(self._root)
+        self._bottom = Frame(self._root)
+
+        self._visualizations = {algo_id: Visualization(self._top, visual_name) for (algo_id, visual_name) in algorithms}
+        self._step_button = Button(self._bottom, text='Step')
+        self._play_button = Button(self._bottom, command=self.toggle_play, text='Toggle Play')
+
+        for id, visual in self._visualizations.iteritems():
+            visual.grid(row=1, column=id)
+        self._step_button.grid(row=2, column=0)
+        self._play_button.grid(row=2, column=1)
+        self._top.pack(side=TOP)
+        self._bottom.pack(side=BOTTOM)
 
     def set_step_func(self, step_func):
         self._step_button['command'] = step_func
 
-    def play(self):
-        self._step_button.invoke()
-        self._root.after(config.SPEED, self.play)
+    def toggle_play(self):
+        if '_playing' not in vars(self):
+            self._playing = False
+        self._playing = not self._playing
+        self.play()
 
-    def recolor_grid(self, color_matrix, finished):
-        self._dijkstra_visual.recolor_grid(color_matrix, finished)
+    def play(self):
+        if self._playing:
+            self._step_button.invoke()
+            self._root.after(config.SPEED, self.play)
+
+    def recolor_grid(self, algo_id, color_matrix, finished):
+        self._visualizations[algo_id].recolor_grid(color_matrix, finished)
+
+    def init_color_grid(self, algo_id, color_matrix):
+        self._visualizations[algo_id].init_color_grid(color_matrix)
 
     def mainloop(self):
         self._root.mainloop()
 
 
-class Visualization(object):
+class Visualization(Frame):
 
     def __init__(self, parent, name):
-        self._grid = Grid(parent)
+        Frame.__init__(self, parent)
         self._name = name
-        self._label = Label(parent, text="%s, Steps: 0" % name)
+        self._grid = Grid(self)
+        self._label = Label(self, text="%s, Steps: 0" % name)
+        self._grid.grid(row=0, column=0)
+        self._label.grid(row=1, column=0)
         self._step_count = 0
         self._finished = False
+
+    def init_color_grid(self, color_matrix):
+        self._grid.recolor(color_matrix)
 
     def recolor_grid(self, color_matrix, finish):
         if not self._finished:
@@ -48,18 +69,16 @@ class Visualization(object):
     def update_label(self):
         self._label['text'] = "%s, Steps: %i" % (self._name, self._step_count)
 
-    def pack(self):
-        self._grid.pack()
-        self._label.pack()
 
-
-class Grid(object):
+class Grid(Frame):
 
     def __init__(self, parent):
+        Frame.__init__(self, parent)
         self._grid_size = config.VISUALBOARD_SIZE
         self._cell_count = config.CELL_COUNT
         self._cell_size = (self._grid_size[0] / self._cell_count[0], self._grid_size[1] / self._cell_count[1])
-        self._canvas = Canvas(parent, width=self._grid_size[0], height=self._grid_size[1])
+        self._canvas = Canvas(self, width=self._grid_size[0], height=self._grid_size[1])
+        self._canvas.grid(row=0, column=0)
         self._cell_id_matrix = self.draw_cells()
 
     def draw_cells(self):
@@ -75,7 +94,4 @@ class Grid(object):
         for x in range(len(self._cell_id_matrix)):
             for y in range(len(self._cell_id_matrix[x])):
                 self._canvas.itemconfigure(self._cell_id_matrix[x][y], fill=color_matrix[x][y])
-
-    def pack(self):
-        self._canvas.pack()
 

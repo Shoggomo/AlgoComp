@@ -4,7 +4,8 @@ from enum import Enum   #package: enum34
 #Configuration
 VISUALBOARD_SIZE = (500, 500)
 CELL_COUNT = (10, 10)   # only quadratic values!
-SPEED = 200 #pause between steps
+SPEED = 100 #pause between steps
+OBSTACLE_COUNT = 20
 
 
 class FieldType(Enum):
