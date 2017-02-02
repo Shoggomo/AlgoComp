@@ -1,31 +1,35 @@
 from gui import GUI
-from config import FieldType
-import matrix_utils as mu
 from Dijkstra import Dijkstra
-from Node import *
-
-def step():
-    pass
-
-def play():
-    pass
+from graph import *
+import config
 
 
-g = Graph()
-g.set_start_node(1, 1)
-g.set_end_node(6, 6)
-g.delete_node((3, 1))
-g.delete_node((1, 3))
-g.delete_node((2, 2))
-c_matrix = mu.graph_to_colormatrix(g)
+def step(gui, *algorithms):
+    def do_step():
+        for algorithm in algorithms:
+            graph, finished = algorithm.do_step()
+            c_matrix = graph_to_colormatrix(graph)
+            gui.recolor_grid(c_matrix, finished)
+    return do_step
 
-gui = GUI()
-gui.recolor_visualboard(c_matrix)
 
-d = Dijkstra(g)
-for _ in range(110):
-    d.do_step()
-c_matrix = mu.graph_to_colormatrix(d.do_step()[0])
-gui.recolor_visualboard(c_matrix)
+def create_graph():
+    g = Graph(config.CELL_COUNT[0], config.CELL_COUNT[1])
+    g.set_start_node(1, 1)
+    g.set_end_node(6, 6)
+    obstacles = ((3, 1), (1, 3), (2, 2), (3, 0), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (2, 8), (3, 8), (4, 8), (5, 8), (6, 8), (7, 8))
+    map(lambda o: g.delete_node(o), obstacles)
+    return g
 
-gui.mainloop()
+
+if __name__ == "__main__":
+    graph = create_graph()
+    dijkstra = Dijkstra(graph)
+
+    gui = GUI()
+    step_func = step(gui, dijkstra)
+    gui.set_step_func(step_func)
+    c_matrix = graph_to_colormatrix(graph)
+    gui.recolor_grid(c_matrix, False)
+
+    gui.mainloop()

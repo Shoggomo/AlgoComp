@@ -1,6 +1,6 @@
 import copy
-from Node import Node
-from Node import Graph
+from graph import Node
+from graph import Graph
 from config import FieldType
 
 class Dijkstra:

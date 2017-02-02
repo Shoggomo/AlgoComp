@@ -1,26 +1,13 @@
 from config import FieldType
 from copy import deepcopy
-import config
 import itertools as it
-
-
-class Node:
-
-    def __init__(self, field_type, distance):
-        self.field_type = field_type
-        self.distance = distance
-        self.visited = False
-        self.predecessor = None
-        self.neighbours = []
-        self.x = 0
-        self.y = 0
 
 
 class Graph:
 
-    def __init__(self):
-        self.length = config.CELL_COUNT[0]
-        self.width = config.CELL_COUNT[1]
+    def __init__(self, length, width):
+        self.length = length
+        self.width = width
         self.nodes = self.__empty_nodes__()
         self.__set_all_neighbours__()
 
@@ -79,3 +66,43 @@ class Graph:
         if type(item) is tuple or type(item) is list:
             item = self.coords_to_index(item[0], item[1])
         self.nodes[item] = value
+
+
+class Node:
+
+    def __init__(self, field_type, distance):
+        self.field_type = field_type
+        self.distance = distance
+        self.visited = False
+        self.predecessor = None
+        self.neighbours = []
+        self.x = 0
+        self.y = 0
+
+
+def get_color_for_node(node):
+    colors = {
+        FieldType.normal: "white",
+        FieldType.start: "blue",
+        FieldType.end: "red",
+        FieldType.current: "orange",
+        FieldType.obstacle: "black",
+        FieldType.path: "pink",
+    }
+    if node:
+        if node.visited and node.field_type is FieldType.normal:
+            return "green"
+        return colors[node.field_type]
+    return colors[FieldType.obstacle]
+
+
+def graph_to_colormatrix(graph):
+    color_matrix = []
+    l = graph.length
+    w = graph.width
+    for x in range(l):
+        color_matrix.append([])
+        for y in range(w):
+            node = graph[(x, y)]
+            color_matrix[x].append(get_color_for_node(node))
+    return color_matrix
