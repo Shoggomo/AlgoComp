@@ -1,4 +1,5 @@
 from config import FieldType
+import config
 from copy import deepcopy
 import itertools as it
 import random
@@ -19,11 +20,16 @@ class Graph:
     def set_end_node(self, x, y):
         self[(x, y)].field_type = FieldType.end
 
+    def get_end_node(self):
+        nodes = filter(lambda n: n and n.field_type == FieldType.end, self.nodes)
+        return nodes[0]
+
     def min_distance_unvisited(self, func):
         unvisited_nodes = filter(lambda x: x and not x.visited, self.nodes)
         if func:
             unvisited_nodes = map(func, unvisited_nodes)
-        return min(unvisited_nodes, key=lambda x: x.distance)
+        node = min(unvisited_nodes, key=lambda x: x.distance)
+        return node if node.distance != config.MAX_DISTANCE else None
 
     #Marks the path backwards. Pass the ends PREDECESSOR!!
     def mark_path(self, node):
@@ -44,7 +50,7 @@ class Graph:
         return i % self.length, i/self.width
 
     def __empty_nodes__(self):
-        empty_node = Node(FieldType.normal, 100000)
+        empty_node = Node(FieldType.normal, config.MAX_DISTANCE)
         nodes = [deepcopy(empty_node) for _ in range(self.length * self.width)]
         for i, n in enumerate(nodes):
             n.x, n.y = self.index_to_coords(i)
@@ -115,6 +121,5 @@ def create_random_graph(cell_count_l, cell_count_w, obstacle_count):
     random_coords = random.sample(all_coords, obstacle_count + 2)
     g.set_start_node(random_coords[0][0], random_coords[0][1])
     g.set_end_node(random_coords[1][0], random_coords[1][1])
-    #obstacles = ((3, 1), (1, 3), (2, 2), (3, 0), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (2, 8), (3, 8), (4, 8), (5, 8), (6, 8), (7, 8))
     map(lambda o: g.delete_node(o), random_coords[2:])
     return g

@@ -1,11 +1,12 @@
-from enum import Enum   #package: enum34
+from enum import Enum   # package: enum34
 
 
-#Configuration
+# Configuration
 VISUALBOARD_SIZE = (500, 500)
 CELL_COUNT = (10, 10)   # only quadratic values!
-SPEED = 100 #pause between steps
-OBSTACLE_COUNT = 20
+SPEED = 100  # pause between steps in milliseconds
+OBSTACLE_COUNT = 30
+MAX_DISTANCE = 10000
 
 
 class FieldType(Enum):
