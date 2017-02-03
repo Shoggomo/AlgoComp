@@ -2,6 +2,7 @@ from gui import GUI
 from Dijkstra import Dijkstra
 from graph import *
 import config
+from aStar import aStar
 
 
 def step(gui, *algorithms):
@@ -15,7 +16,7 @@ def step(gui, *algorithms):
 if __name__ == "__main__":
     graph = create_random_graph(config.CELL_COUNT[0], config.CELL_COUNT[1], config.OBSTACLE_COUNT)
     dijkstra = Dijkstra(graph)
-    d2 = Dijkstra(graph)    #REPLACE WITH OTHER ALGORITHMS
+    d2 = aStar(graph)    #REPLACE WITH OTHER ALGORITHMS
     algo_names = [[0, "Dijkstra"], [1, "A*"]]
 
     gui = GUI(algo_names)

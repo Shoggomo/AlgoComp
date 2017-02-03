@@ -26,9 +26,8 @@ class Graph:
 
     def min_distance_unvisited(self, func):
         unvisited_nodes = filter(lambda x: x and not x.visited, self.nodes)
-        if func:
-            unvisited_nodes = map(func, unvisited_nodes)
-        node = min(unvisited_nodes, key=lambda x: x.distance)
+        func = (lambda x: 0) if not func else func
+        node = min(unvisited_nodes, key=lambda x: x.distance + func(x))
         return node if node.distance != config.MAX_DISTANCE else None
 
     #Marks the path backwards. Pass the ends PREDECESSOR!!
