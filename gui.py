@@ -14,7 +14,7 @@ class GUI(object):
         self._play_button = Button(self._bottom, command=self.toggle_play, text='Toggle Play')
 
         for id, visual in self._visualizations.iteritems():
-            visual.grid(row=1, column=id)
+            visual.grid(row=1, column=id, padx=20)
         self._step_button.grid(row=2, column=0)
         self._play_button.grid(row=2, column=1)
         self._top.pack(side=TOP)

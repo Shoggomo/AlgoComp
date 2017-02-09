@@ -13,14 +13,15 @@ def step(gui, *algorithms):
             gui.recolor_grid(i, c_matrix, finished)
     return do_step
 
-if __name__ == "__main__":
+
+def main():
     graph = create_random_graph(config.CELL_COUNT[0], config.CELL_COUNT[1], config.OBSTACLE_COUNT)
     dijkstra = Dijkstra(graph)
-    d2 = aStar(graph)    #REPLACE WITH OTHER ALGORITHMS
+    astar = aStar(graph)
     algo_names = [[0, "Dijkstra"], [1, "A*"]]
 
     gui = GUI(algo_names)
-    step_func = step(gui, dijkstra, d2)
+    step_func = step(gui, dijkstra, astar)
     gui.set_step_func(step_func)
 
     c_matrix = graph_to_colormatrix(graph)
@@ -28,3 +29,7 @@ if __name__ == "__main__":
         gui.init_color_grid(i, c_matrix)
 
     gui.mainloop()
+
+
+if __name__ == "__main__":
+    main()

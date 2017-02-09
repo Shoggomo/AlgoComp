@@ -2,7 +2,7 @@ from enum import Enum   # package: enum34
 
 
 # Configuration
-VISUALBOARD_SIZE = (500, 500)
+VISUALBOARD_SIZE = (400, 400)
 CELL_COUNT = (10, 10)   # only quadratic values!
 SPEED = 100  # pause between steps in milliseconds
 OBSTACLE_COUNT = 30
