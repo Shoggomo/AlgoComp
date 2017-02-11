@@ -1,8 +1,9 @@
-from config import FieldType
-import config
-from copy import deepcopy
 import itertools as it
 import random
+from copy import deepcopy
+
+import config
+from config import FieldType
 
 
 class Graph:

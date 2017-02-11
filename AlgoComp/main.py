@@ -1,8 +1,8 @@
-from gui import GUI
-from Dijkstra import Dijkstra
-from graph import *
 import config
+from Dijkstra import Dijkstra
 from aStar import aStar
+from graph import *
+from gui import GUI
 
 
 def step(gui, *algorithms):
