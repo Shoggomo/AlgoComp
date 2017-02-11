@@ -1,6 +1,7 @@
 import copy
 from config import FieldType
 
+
 class Dijkstra:
 
     def __init__(self, start_graph):

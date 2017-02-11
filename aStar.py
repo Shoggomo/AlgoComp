@@ -1,7 +1,6 @@
 import copy
-from graph import Node
-from graph import Graph
 from config import FieldType
+
 
 class aStar:
     def __init__(self, start_graph):
@@ -11,16 +10,15 @@ class aStar:
     def do_step(self):
 
         def heuristic(goal):
-            def programm(a):
+            def program(a):
                 return abs(goal.x - a.x) + abs(goal.y - a.y)
-            return programm
+            return program
 
         if self.last_node:
             self.last_node.field_type = self.last_field_type
         current_node = self.graph.min_distance_unvisited(heuristic(self.graph.get_end_node()))
         if not current_node:
             return self.graph, True
-
 
         if current_node.field_type == FieldType.end:
             self.graph.mark_path(current_node.predecessor)
